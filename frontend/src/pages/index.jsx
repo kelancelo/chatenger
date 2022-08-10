@@ -8,7 +8,7 @@ import Contact from "../components/contact"
 import Message from "../components/message"
 import '../styles/index.css'
 
-const prodMode = false
+const prodMode = true
 const socket = prodMode
     ? io({ autoConnect: false })
     : io('http://localhost:5000', { autoConnect: false })
