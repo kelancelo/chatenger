@@ -4,8 +4,8 @@
     row-gap: 1em;
     justify-items: center;
     max-width: 50rem;
-    margin-inline: auto;
     height: 90vh;
+    margin-inline: auto;
 }
 
 #greeting {

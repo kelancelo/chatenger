@@ -1,2 +1,2 @@
-web: node index.js
+web: npm run start
 release: npx prisma migrate deploy
