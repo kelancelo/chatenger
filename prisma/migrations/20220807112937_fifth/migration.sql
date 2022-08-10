@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE `message` MODIFY `date_sent` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3);

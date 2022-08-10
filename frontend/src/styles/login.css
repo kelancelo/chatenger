@@ -1,0 +1,14 @@
+#login-main {
+    display: grid;
+    row-gap: 2em;
+    justify-content: center;
+    margin-top: 4em;
+}
+
+#login-main>h1 {
+    font-size: 2.5rem;
+}
+
+#login-main>button {
+    font-size: 1.5rem;
+}

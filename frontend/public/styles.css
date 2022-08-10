@@ -1,0 +1,42 @@
+*,
+*::before,
+*::after {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    border-radius: 4px;
+}
+
+:root {
+    --light: #f6f7f9;
+    --primary: #149eca;
+    --secondary: #343a46;
+    --dark: #23272f;
+}
+
+body {
+    background-color: var(--dark);
+    color: var(--light);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    padding-inline: 1em;
+    padding-top: 2em;
+}
+
+input {
+    background-color: var(--secondary);
+    color: var(--light);
+    border: none;
+}
+
+button {
+    background-color: var(--primary);
+    color: var(--light);
+    padding: .5em 1em;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #107091;
+}
