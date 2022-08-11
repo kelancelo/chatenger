@@ -31,29 +31,42 @@
     justify-self: stretch;
 }
 
+#contacts-container {
+    display: grid;
+    grid-template-rows: max-content 1fr;
+    border: 2px solid var(--secondary);
+    /* row-gap: 1em; */
+}
+
+#contacts-container-title {
+    text-align: center;
+    border-radius: unset;
+    font-weight: bold;
+    background-color: var(--accent1);
+    padding: .3em;
+}
+
 #contacts {
     display: grid;
     grid-auto-rows: max-content;
-    padding: .5em;
     row-gap: .5em;
-    border: 2px solid var(--secondary);
+    padding: .5em;
 }
 
 .contact {
     display: flex;
     flex-wrap: wrap;
-    /* display: grid;
-    grid-template-columns: max-content max-content; */
     align-items: center;
     column-gap: 1em;
     row-gap: .5em;
     padding: .5em;
     cursor: pointer;
     background-color: var(--secondary);
+    position: relative;
 }
 
 .contact:hover {
-    background-color: #283541;
+    background-color: var(--primary);
 }
 
 .contact-img-container {
@@ -76,6 +89,16 @@
     border: .1rem solid white;
 }
 
+.unread-messages-count {
+    font-size: .75rem;
+    text-align: center;
+    width: 1rem;
+    height: 1rem;
+    background-color: lightcoral;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+}
 
 #chatbox {
     display: grid;
@@ -83,9 +106,23 @@
     gap: 1em;
 }
 
-#messages {
-    max-height: 33vh;
+#messages-container {
+    display: grid;
+    grid-template-rows: max-content 1fr;
     border: 2px solid var(--secondary);
+
+}
+
+#messages-container-title {
+    text-align: center;
+    border-radius: unset;
+    font-weight: bold;
+    background-color: var(--accent1);
+    padding: .3em;
+}
+
+#messages {
+    max-height: 28vh;
     overflow-y: auto;
     scrollbar-width: thin;
 }
@@ -101,14 +138,14 @@
 }
 
 
-#message {
+.message {
     padding: .5em;
     display: grid;
     grid-template-columns: 1fr 1fr;
     column-gap: 1em;
 }
 
-#message>span {
+.message>span {
     padding: .5em;
     border-radius: 5%;
 }
@@ -131,6 +168,6 @@
     }
 
     #messages {
-        max-height: 75vh;
+        max-height: 70vh;
     }
 }

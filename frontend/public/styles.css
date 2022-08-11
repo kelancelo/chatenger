@@ -12,6 +12,8 @@
     --primary: #149eca;
     --secondary: #343a46;
     --dark: #23272f;
+    --accent1: #283541;
+    /* --accent1: pink; */
 }
 
 body {

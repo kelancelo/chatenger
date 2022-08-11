@@ -32,6 +32,7 @@ async function saveUser(id, email, givenName, familyName, picture) {
                 picture
             }
         })
+        return newUser
     }
 }
 
@@ -52,9 +53,6 @@ async function getMessages(id) {
                 { senderId: id },
                 { receiverId: id }
             ]
-        },
-        orderBy: {
-            date_sent: 'asc'
         }
     })
 }
@@ -70,29 +68,46 @@ async function saveMessage(id, content, senderId, receiverId) {
     })
 }
 
+async function updateMessage(id) {
+    return await prisma.message.update({
+        where: { id: id },
+        data: { hasBeenRead: true }
+    })
+}
+
 io.on('connection', async (socket) => {
-    const { id, email, givenName, familyName, picture } = socket.handshake.auth.user
-    socket.join(id)
-    console.log('a user has connected:', id)
-    socket.broadcast.emit('user connected', id)
-    await saveUser(id, email, givenName, familyName, picture)
+    const { id, email, givenName, familyName, picture } = socket.handshake.auth.user // extract user data
+    const newUser = await saveUser(id, email, givenName, familyName, picture)
     const users = await getUsers(id)
-    socket.emit('users', users)
     const onlineUsers = []
-    for (const [id, socket] of io.of("/").sockets) {
+    for (const [id, socket] of io.of("/").sockets) {     // get current online users
         onlineUsers.push(socket.handshake.auth.user.id)
     }
-    // console.log('online users:', onlineUsers)
-    socket.emit('online users', onlineUsers)
     const messages = await getMessages(id)
+
+    socket.join(id)
+    console.log('a user has connected:', id)
+    if (newUser) socket.broadcast.emit('new user', newUser) // if user is new to the system, broadcast it so the logged in users will be able to add the new user in their contacts panel.
+    socket.emit('users', users)
+    socket.emit('online users', onlineUsers)
     socket.emit('messages', messages)
+    socket.broadcast.emit('user connected', id) // same functionality as the "online users" event except this is for when a user goes online, the current online users will be able to see the status indicator change for that user.
+
+
+    socket.on('get messages', async (senderId, receiverId) => {
+        socket.emit('get messages', await getMessages(senderId, receiverId))
+    })
     socket.on('chat message', async ({ id, content, senderId, receiverId }) => {
         const newMessage = await saveMessage(id, content, senderId, receiverId)
         socket.to(receiverId).emit('chat message', newMessage)
     })
+    socket.on('message has been read', async (messageId) => {
+        const { id } = await updateMessage(messageId)
+        socket.emit('message has been read', id)
+    })
     socket.on('disconnect', () => {
         console.log('a user has disconnected.')
-        socket.broadcast.emit('user disconnected', id)
+        socket.broadcast.emit('user disconnected', id) // changes the color of status indicator for the user to red.
     })
 })
 

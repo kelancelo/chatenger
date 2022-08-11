@@ -21,11 +21,12 @@ model User {
 }
 
 model Message {
-  id         String   @id
-  content    String
-  sender     User     @relation(name: "SentMessages", fields: [senderId], references: [id])
-  senderId   String
-  receiver   User     @relation(name: "ReceivedMessages", fields: [receiverId], references: [id])
-  receiverId String
-  date_sent  DateTime @default(now())
+  id          String   @id
+  content     String
+  sender      User     @relation(name: "SentMessages", fields: [senderId], references: [id])
+  senderId    String
+  receiver    User     @relation(name: "ReceivedMessages", fields: [receiverId], references: [id])
+  receiverId  String
+  hasBeenRead Boolean  @default(false)
+  date_sent   DateTime @default(now())
 }
