@@ -8,7 +8,6 @@ import Contact from "../components/contact"
 import Message from "../components/message"
 import '../styles/index.css'
 
-// console.log(location.origin.replace(/^htt/, 'ws'))
 
 const socket = import.meta.env.PROD
     ? io({ autoConnect: false })
@@ -22,6 +21,7 @@ export default function Index() {
     const [users, setUsers] = useState([])
     const [selectedUser, setSelectedUser] = useState('')
     const [messages, setMessages] = useState([])
+    const [messagesCount, setMessagesCount] = useState(0)
     const [messagesToShow, setMessagesToShow] = useState([])
     const messagesRef = useRef(null)
     const chatInputRef = useRef(null)
@@ -54,7 +54,10 @@ export default function Index() {
                 if (ids.includes(user.id)) return { ...user, isOnline: true }
                 else return user
             })))
-            socket.on('messages', (retrievedMessages) => setMessages(retrievedMessages))
+            socket.on('messages', (retrievedMessages) => {
+                setMessages(retrievedMessages)
+                setMessagesCount(retrievedMessages.length)
+            })
             socket.on('user connected', (id) => setUsers((users) => users.map((user) => {
                 if (user.id === id) return { ...user, isOnline: true }
                 else return user
@@ -64,6 +67,7 @@ export default function Index() {
             })
             socket.on('chat message', (message) => {
                 setMessages((messages) => [...messages, message])
+                // alert(message.content)
             })
             socket.on('message has been read', (messageId) => setMessages((messages) => {
                 return messages.map((message) => {
@@ -92,10 +96,19 @@ export default function Index() {
     }, [isLoading, isAuthenticated])
 
     useEffect(() => {
+        if (messagesCount !== messages.length) {
+            setMessagesToShow(messages.filter((message) => {
+                return selectedUser === message.senderId || selectedUser === message.receiverId
+            }))
+            setMessagesCount(messages.length)
+        }
+    }, [messages])
+
+    useEffect(() => {
         setMessagesToShow(messages.filter((message) => {
             return selectedUser === message.senderId || selectedUser === message.receiverId
         }))
-    }, [messages, selectedUser])
+    }, [selectedUser])
 
     useEffect(() => {
         if (messagesRef.current) {
@@ -114,7 +127,7 @@ export default function Index() {
                 }
             }, {
                 root: messagesRef.current,
-                threshold: .8
+                threshold: .6
             })
             for (const message of messagesRef.current.children) {
                 observer.observe(message)
@@ -138,7 +151,6 @@ export default function Index() {
                 receiverId: selectedUser
             }
             socket.emit('chat message', message)
-            setMessages([...messages, message])
             chatInputRef.current.value = ''
         }
         else alert('select a recipient first!')

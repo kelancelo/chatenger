@@ -13,7 +13,9 @@ const prisma = new PrismaClient()
 require('dotenv').config()
 const port = process.env.PORT || 5000
 
+
 app.use(express.static('frontend/dist'))
+
 
 async function saveUser(id, email, givenName, familyName, picture) {
     const user = await prisma.user.findUnique({
@@ -78,28 +80,25 @@ async function updateMessage(id) {
 io.on('connection', async (socket) => {
     const { id, email, givenName, familyName, picture } = socket.handshake.auth.user // extract user data
     const newUser = await saveUser(id, email, givenName, familyName, picture)
-    const users = await getUsers(id)
     const onlineUsers = []
     for (const [id, socket] of io.of("/").sockets) {     // get current online users
         onlineUsers.push(socket.handshake.auth.user.id)
     }
-    const messages = await getMessages(id)
-
     socket.join(id)
     console.log('a user has connected:', id)
-    if (newUser) socket.broadcast.emit('new user', newUser) // if user is new to the system, broadcast it so the logged in users will be able to add the new user in their contacts panel.
-    socket.emit('users', users)
-    socket.emit('online users', onlineUsers)
-    socket.emit('messages', messages)
-    socket.broadcast.emit('user connected', id) // same functionality as the "online users" event except this is for when a user goes online, the current online users will be able to see the status indicator change for that user.
 
+    if (newUser) socket.broadcast.emit('new user', newUser) // if user is new to the system, broadcast it so the logged in users will be able to add the new user in their contacts panel.
+    socket.emit('users', await getUsers(id))
+    socket.emit('online users', onlineUsers)
+    socket.emit('messages', await getMessages(id))
+    socket.broadcast.emit('user connected', id) // same functionality as the "online users" event except this is for when a user goes online, the current online users will be able to see the status indicator change for that user.
 
     socket.on('get messages', async (senderId, receiverId) => {
         socket.emit('get messages', await getMessages(senderId, receiverId))
     })
     socket.on('chat message', async ({ id, content, senderId, receiverId }) => {
         const newMessage = await saveMessage(id, content, senderId, receiverId)
-        socket.to(receiverId).emit('chat message', newMessage)
+        io.to(senderId).to(receiverId).emit('chat message', newMessage)
     })
     socket.on('message has been read', async (messageId) => {
         const { id } = await updateMessage(messageId)
