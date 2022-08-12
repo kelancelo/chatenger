@@ -8,10 +8,13 @@ import Contact from "../components/contact"
 import Message from "../components/message"
 import '../styles/index.css'
 
+// console.log(location.origin.replace(/^htt/, 'ws'))
+
 const socket = import.meta.env.PROD
     ? io({ autoConnect: false })
     : io('http://localhost:5000', { autoConnect: false })
 
+console.log(socket)
 
 export default function Index() {
     const navigate = useNavigate()
@@ -145,7 +148,7 @@ export default function Index() {
         <main id="index-main">
             <div id="greeting">
                 <p>Hi {user.given_name ? user.given_name : user.name}!</p>
-                <a id="logout-link" onClick={() => logout({ returnTo: window.location.origin })}>Logout</a>
+                <a id="logout-link" onClick={() => logout({ returnTo: location.origin })}>Logout</a>
             </div>
             <div id="chat-container">
                 <div id="contacts-container">
