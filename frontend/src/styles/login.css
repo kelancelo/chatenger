@@ -3,6 +3,7 @@
     row-gap: 2em;
     justify-content: center;
     margin-top: 4em;
+    align-self: start;
 }
 
 #login-main>h1 {

@@ -13,7 +13,7 @@ const socket = import.meta.env.PROD
     ? io({ autoConnect: false })
     : io('http://localhost:5000', { autoConnect: false })
 
-console.log(socket)
+// console.log(socket)
 
 export default function Index() {
     const navigate = useNavigate()

@@ -23,8 +23,10 @@ body {
 }
 
 #root {
+    display: grid;
+    justify-content: center;
+    height: 100vh;
     padding-inline: 1em;
-    padding-top: 1em;
 }
 
 input {
