@@ -3,11 +3,12 @@ Chatenger is a simple private messaging app with features like online/offline st
 
 ## Tech stack
 These are the technologies used to build this project.
-* React
-* Node.js
+* CSS3
 * Express
-* PostgreSQL
 * Heroku
+* Node.js
+* PostgreSQL
+* React
 
 ## ERD
 ![Chat app ERD](https://user-images.githubusercontent.com/33194805/184502574-64e99b38-b3f3-4f2d-b31c-c9e3d0d82de0.png)
