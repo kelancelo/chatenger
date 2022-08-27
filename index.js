@@ -12,9 +12,14 @@ const { PrismaClient } = require('@prisma/client')
 const prisma = new PrismaClient()
 require('dotenv').config()
 const port = process.env.PORT || 5000
+const path = require('path')
 
 
 app.use(express.static('frontend/dist'))
+
+app.all('/*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'frontend', 'dist', 'index.html'))
+})
 
 
 async function saveUser(id, email, givenName, familyName, picture) {
