@@ -1,4 +1,4 @@
-#index-main {
+#index-body {
     display: grid;
     grid-template-rows: max-content 1fr;
     row-gap: 1em;
@@ -8,23 +8,23 @@
     align-self: center;
 }
 
-#greeting {
+header {
     display: grid;
     row-gap: .5em;
     justify-items: center;
 }
 
-#greeting>p {
+header>p {
     font-weight: bold;
 }
 
-#greeting>a {
+header>a {
     text-decoration: underline;
     cursor: pointer;
     color: var(--light);
 }
 
-#chat-container {
+main {
     display: grid;
     grid-template-rows: 1fr 1fr;
     gap: 1em;
@@ -162,11 +162,11 @@
 }
 
 @media screen and (min-width: 810px) {
-    #index-main {
+    #index-body {
         max-width: 60rem;
         justify-self: center;
     }
-    #chat-container {
+    main {
         grid-template-rows: unset;
         grid-template-columns: 1fr 1fr;
     }
