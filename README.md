@@ -3,12 +3,8 @@ Chatenger is a simple private messaging app with features like online/offline st
 
 ## Tech stack
 These are the technologies used to build this project.
-* Auth0
-* CSS3
 * Express
-* Heroku
 * Node.js
-* Prisma
 * PostgreSQL
 * React
 
